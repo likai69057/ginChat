@@ -5,7 +5,7 @@ import (
 	"ginChat/utils"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type UserBasic struct {
@@ -36,4 +36,27 @@ func GetUserList() []*UserBasic {
 		fmt.Println(v)
 	}
 	return data
+}
+
+// 新增用户
+func CreateUser(user UserBasic) {
+	utils.DB.Create(&user)
+}
+
+// 删除用户
+func DeleteUser(user UserBasic) {
+	utils.DB.First(&user, user.ID)
+	utils.DB.Delete(&user)
+}
+
+// 更新用户信息用户
+func UpdateUser(user UserBasic) {
+	utils.DB.First(&user, user.ID)
+	utils.DB.Model(&user).Updates(
+		UserBasic{
+			Name:     user.Name,
+			PassWord: user.PassWord,
+			Phone:    user.Phone,
+			Email:    user.Email,
+		})
 }
